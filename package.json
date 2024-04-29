@@ -1,6 +1,6 @@
 {
-  "name": "mapit-iot/vue-pdf",
-  "version": "4.2.1",
+  "name": "@mapit/vue-pdf",
+  "version": "4.3.1",
   "description": "vue.js pdf viewer",
   "main": "src/vuePdfNoSss.vue",
   "scripts": {},
@@ -15,10 +15,6 @@
   ],
   "author": "Franck FREIBURGER",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mapit-iot/vue-pdf/issues"
-  },
-  "homepage": "https://github.com/mapit-iot/vue-pdf#readme",
   "dependencies": {
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "loader-utils": "^1.4.0",
@@ -26,6 +22,5 @@
     "worker-loader": "^2.0.0",
     "pdfjs-dist": "^2.5.207 <2.8.0",
     "vue-resize-sensor": "^2.0.0"
-  },
-  "peerDependencies": {}
+  }
 }
