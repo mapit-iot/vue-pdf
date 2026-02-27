@@ -42,3 +42,14 @@ jobs:
 
       - name: Check format
         run: pnpm format
+
+      - name: Check version bump
+        run: |
+          git fetch origin master
+          CURRENT_VER=$(node -p "require('./package.json').version")
+          MASTER_VER=$(git show origin/master:package.json | node -p "JSON.parse(require('fs').readFileSync(0)).version")
+          if [ "$CURRENT_VER" = "$MASTER_VER" ]; then
+            echo "❌ Version NOT bumped ($CURRENT_VER) - please bump the package version"
+            exit 1
+          fi
+          echo "✅ Version bumped: $MASTER_VER → $CURRENT_VER"
