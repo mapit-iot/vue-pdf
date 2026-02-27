@@ -1,0 +1,44 @@
+name: Run checks and tests on PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+    branches: [master]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  check:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: [self-hosted, sushi]
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Configure mapit-dev AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::230374939483:role/GitHub-Actions-Role
+          role-session-name: mapit
+          aws-region: eu-west-1
+
+      - name: Login to AWS CodeArtifact
+        run: |
+          aws codeartifact login --tool npm --domain mapit-iot --repository mapit-repo --namespace mapit --domain-owner 195845782233
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Check format
+        run: pnpm format
