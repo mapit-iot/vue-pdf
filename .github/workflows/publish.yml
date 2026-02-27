@@ -1,0 +1,45 @@
+name: Publish Packages
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::195845782233:role/GitHub-Actions-Role
+          role-session-name: mapit
+          aws-region: eu-west-1
+
+      - name: Login to AWS CodeArtifact
+        run: |
+          aws codeartifact login --tool npm --domain mapit-iot --repository mapit-repo --namespace mapit --domain-owner 195845782233
+
+      - name: Publish to AWS CodeArtifact
+        run: npm publish
+
+      - name: Summary
+        run: |
+          echo "## Published Package" >> $GITHUB_STEP_SUMMARY
+          node -e "const p=require('./package.json'); console.log('- ' + p.name + '@' + p.version)" >> $GITHUB_STEP_SUMMARY
