@@ -1,6 +1,6 @@
 {
   "name": "@mapit/vue-pdf",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "description": "vue.js pdf viewer",
   "main": "src/vuePdfNoSss.vue",
   "scripts": {
@@ -28,5 +28,6 @@
   },
   "devDependencies": {
     "prettier": "^3.8.1"
-  }
+  },
+  "packageManager": "pnpm@10.28.0"
 }
